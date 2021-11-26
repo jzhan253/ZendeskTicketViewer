@@ -43,11 +43,25 @@ public class ZendeskClient {
     }
 
     public List<Ticket> getTicketList(){
-        return getList(searchZendesk(buildURL(""), 0));
+        try{
+            String resultStr = searchZendesk(buildURL(""), 0);
+            if(resultStr == null || resultStr.length() == 0) return new ArrayList<>();
+            return getList(resultStr);
+        } catch (ZendeskException e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public Ticket getSingleTicket(long id){
-        return getTicket(searchZendesk(buildURL("/" + id), 1));
+        try{
+            String resultStr = searchZendesk(buildURL("/" + id), 1);
+            if(resultStr == null || resultStr.length() == 0) return null;
+            return getTicket(resultStr);
+        } catch (ZendeskException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private Ticket getTicket(String data){
@@ -97,12 +111,13 @@ public class ZendeskClient {
                     e.printStackTrace();
                     return null;
                 }
-            } else return "";
+            } else return null;
 
         };
 
         try {
             HttpGet request = new HttpGet(url);
+            if(EMAIL == null || EMAIL.length() == 0 || PASSWORD == null || PASSWORD.length() == 0) return "";
             String encoding = Base64.getEncoder().encodeToString((EMAIL + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));
             request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
             return httpclient.execute(request, responseHandler);
