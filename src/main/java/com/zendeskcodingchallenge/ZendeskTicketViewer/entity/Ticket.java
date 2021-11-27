@@ -79,11 +79,8 @@ public class Ticket {
     String updatedAt;
     @JsonProperty("url")
     String url;
-    // For API - ticket endpoints this is not important
     @JsonProperty("via")
     Object via;
     @JsonProperty("via_followup_source_id")
     long viaFollowupSourceId;
-//    boolean open;
-//    Date created_at;
 }
