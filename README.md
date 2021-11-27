@@ -3,9 +3,9 @@ Zendesk 2022 Summer Internship Coding Challenge.
 
 ## Installation & Usage Instruction
 1. Download the code as Zip file or using git clone to your local file system.
-2. Open the project with IntelliJ IDEA, or you could use terminal to locate the directory.
-3. Let IntelliJ IDEA to load the dependencies of the Back-End or you could manually use **mvn install**.
-4. Go to the Front-End directory under src\main\frontend, and run **npm install** to install all Front-End packages.
+2. Open the project with IntelliJ IDEA, or you could use terminal to locate and go to the directory.
+3. Let IntelliJ IDEA to load the dependencies of the Back-End or you could manually use **mvn install** in terminal.
+4. Go to the Front-End directory under src\main\frontend in terminal, and run **npm install** to install all Front-End packages.
 5. Fill your own data to the **"subdomain", "email", "password"** in \src\main\resources\config.properties before start the server, otherwise you won't able to get any data from Zendesk server.
 6. Start the Back-End server by click the Run button of IntelliJ IDEA at src\main\java\ZendeskTicketViewerApplication.java, or you could use terminal command **mvn spring-boot:run**.
 7. Start the Front-End webapp using command **npm start** under src\main\frontend 
