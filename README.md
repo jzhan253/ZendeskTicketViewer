@@ -25,7 +25,11 @@ The default tickets amount to trigger the pagination was set to 25 tickets, you 
 ![image](https://user-images.githubusercontent.com/62904466/143723688-7bbe8180-c357-469a-be58-52ec38ad3558.png)
 By Clicking the "Back-Arrow" button at the top left corner, you will be able to back to the tickets list page.
 
-
+## Features
+- Connect to the Zendesk API
+- Get and present all tickets from some Zendesk account in a list(table), with "Status", "Subject", "Requester ID", "Requested"(Date), "Tags", "Priority" as properties.
+- Pagination the list(table) if the total number of tickets is above 25
+- By clicking one specific ticket subject in the list(table), the program will get and display specific ticket detail("Subject", "Requested"(Date), "Requester ID", "Tags", "Ticket ID", "Ticket Description", "Status") in one page.
 
 ## Project Structure
 - Back-End: Spring Boot
