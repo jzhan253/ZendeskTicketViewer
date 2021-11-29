@@ -107,7 +107,7 @@ class Tickets extends React.Component{
             return (
                 <div>
                     <text>Error : {error}</text>
-                    <Link to='/tickets'><Button>Back to home page</Button></Link>
+                    <Link to='/'><Button>Back to home page</Button></Link>
                 </div>
             );
         } else if(!isLoaded){

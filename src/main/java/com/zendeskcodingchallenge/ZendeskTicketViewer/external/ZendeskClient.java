@@ -66,7 +66,7 @@ public class ZendeskClient {
         try{
             String resultStr = searchZendesk(buildURL("/" + id), 1);
             if(resultStr == null || resultStr.length() == 0) {
-                Result<Ticket> res = new Result<>(500, "Unable to fetch response string!");
+                Result<Ticket> res = new Result<>(500, "Unable to fetch response string! check your credentials!");
                 res.setData(null);
                 return res;
             }
@@ -102,7 +102,7 @@ public class ZendeskClient {
         }
     }
 
-    private String searchZendesk(String url, int flag) throws ZendeskException{
+    public String searchZendesk(String url, int flag) throws ZendeskException{
         CloseableHttpClient httpclient = HttpClients.createDefault();
         ResponseHandler<String> responseHandler = response -> {
             int responseCode = response.getStatusLine().getStatusCode();
@@ -159,6 +159,8 @@ public class ZendeskClient {
         }
 
     }
+
+
 
 
 }

@@ -83,4 +83,6 @@ public class Ticket {
     Object via;
     @JsonProperty("via_followup_source_id")
     long viaFollowupSourceId;
+
+
 }

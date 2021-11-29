@@ -27,7 +27,4 @@ public class TicketsController {
         return ticketService.getTicket(id);
     }
 
-
-
-
 }
