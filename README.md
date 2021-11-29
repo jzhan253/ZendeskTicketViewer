@@ -34,5 +34,7 @@ By Clicking the "Back-Arrow" button at the top left corner, you will be able to 
 ## Project Structure
 - Back-End: Spring Boot
 - Front-End: React.js
-
 ![image](https://user-images.githubusercontent.com/62904466/143723148-7cd46c88-3795-499d-b122-0f4e790b36ab.png)
+
+## Unit Test
+find unit test codes under \src\test\java\com\zendeskcodingchallenge\ZendeskTicketViewer\
