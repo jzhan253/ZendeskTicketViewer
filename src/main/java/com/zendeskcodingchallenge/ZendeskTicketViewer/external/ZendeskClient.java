@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zendeskcodingchallenge.ZendeskTicketViewer.entity.Ticket;
+import com.zendeskcodingchallenge.ZendeskTicketViewer.util.Result;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.ResponseHandler;
@@ -42,25 +43,41 @@ public class ZendeskClient {
         return String.format(URL_TEMPLATE, SUBDOMAIN, suffix);
     }
 
-    public List<Ticket> getTicketList(){
+    public Result<List<Ticket>> getTicketList(){
         try{
             String resultStr = searchZendesk(buildURL(""), 0);
-            if(resultStr == null || resultStr.length() == 0) return new ArrayList<>();
-            return getList(resultStr);
+            if(resultStr == null || resultStr.length() == 0){
+                Result<List<Ticket>> res = new Result<>(500, "Unable to fetch response string!");
+                res.setData(new ArrayList<>());
+                return res;
+            }
+            Result<List<Ticket>> res = new Result<>(200, "Success");
+            res.setData(getList(resultStr));
+            return res;
         } catch (ZendeskException e){
             e.printStackTrace();
-            return new ArrayList<>();
+            Result<List<Ticket>> res = new Result<>(e.getCode(), e.getMessage());
+            res.setData(new ArrayList<>());
+            return res;
         }
     }
 
-    public Ticket getSingleTicket(long id){
+    public Result<Ticket> getSingleTicket(long id){
         try{
             String resultStr = searchZendesk(buildURL("/" + id), 1);
-            if(resultStr == null || resultStr.length() == 0) return null;
-            return getTicket(resultStr);
+            if(resultStr == null || resultStr.length() == 0) {
+                Result<Ticket> res = new Result<>(500, "Unable to fetch response string!");
+                res.setData(null);
+                return res;
+            }
+            Result<Ticket> res = new Result<>(200, "Success");
+            res.setData(getTicket(resultStr));
+            return res;
         } catch (ZendeskException e){
             e.printStackTrace();
-            return null;
+            Result<Ticket> res = new Result<>(e.getCode(), e.getMessage());
+            res.setData(null);
+            return res;
         }
     }
 
@@ -70,7 +87,6 @@ public class ZendeskClient {
             return mapper.readValue(data, Ticket.class);
         } catch (JsonProcessingException | ZendeskException e) {
             e.printStackTrace();
-            System.out.println("haha");
             return null;
         }
     }
@@ -92,26 +108,33 @@ public class ZendeskClient {
             int responseCode = response.getStatusLine().getStatusCode();
             if (responseCode != 200) {
                 System.out.println("Response status: " + response.getStatusLine().getReasonPhrase());
-                throw new ZendeskException("Failed to get result from Zendesk API, 1");
+                if(responseCode == 500){
+                    // If the response code is 500, meaning something wrong at the Zendesk Server.
+                    throw new ZendeskException("Failed to get result from Zendesk API, Zendesk Server Internal Error!", 500);
+                } else if(responseCode == 404){
+                    throw new ZendeskException("Failed to get result from Zendesk API, Ticket Not Found!", 404);
+                }
+                // Otherwise, it will be the authentication issue.
+                throw new ZendeskException("Failed to get result from Zendesk API, check your credentials!", 400);
             }
             HttpEntity entity = response.getEntity();
             if (entity == null) {
-                throw new ZendeskException("Failed to get result from Zendesk API, 2");
+                throw new ZendeskException("Failed to get result from Zendesk API, Empty HTTP response", 400);
             }
-            JSONObject obj = null;
+            JSONObject obj;
             try {
                 obj = new JSONObject(EntityUtils.toString(entity));
             } catch (JSONException e) {
                 e.printStackTrace();
+                return null;
             }
-            if(obj != null){
-                try {
-                    return flag == 0 ? obj.getJSONArray("tickets").toString() : obj.getJSONObject("ticket").toString();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            } else return null;
+            try {
+                // Check the flag parameter to determine whether it's asking about a tickets list or a single ticket
+                return flag == 0 ? obj.getJSONArray("tickets").toString() : obj.getJSONObject("ticket").toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
 
         };
 
@@ -121,9 +144,12 @@ public class ZendeskClient {
             String encoding = Base64.getEncoder().encodeToString((EMAIL + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));
             request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
             return httpclient.execute(request, responseHandler);
-        } catch (IOException | ZendeskException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new ZendeskException("Failed to get result from Zendesk API, 3");
+            throw new ZendeskException(e.getMessage(), 400);
+        } catch (ZendeskException e){
+            e.printStackTrace();
+            throw new ZendeskException(e.getMessage(), e.getCode());
         } finally {
             try {
                 httpclient.close();

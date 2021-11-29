@@ -6,6 +6,7 @@ import Tickets from "./Component/Tickets";
 import Home from "./Component/Home";
 import TicketsDetail from "./Component/TicketDetail";
 import { Header} from "antd/es/layout/layout";
+import My404Component from "./Component/My404Component";
 
 
 
@@ -25,6 +26,7 @@ class App extends React.Component{
                   <Route path='/' element={<Home />}/>
                   <Route path='/tickets' element={<Tickets />}/>
                   <Route path='/tickets/:id' element={<TicketsDetail/>} />
+                  <Route path='*' element={<My404Component />}/>
                   {/*<Route path='/tickets/:id' element={<TicketsDetail />}/>*/}
                 </Routes>
               </Router>
