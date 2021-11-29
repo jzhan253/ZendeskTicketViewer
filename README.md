@@ -1,4 +1,4 @@
-# ZendeskTicketViewer
+# ZendeskTicketViewer (Spring Boot + React.js)
 Zendesk 2022 Summer Internship Coding Challenge.
 
 ## Installation & Usage Instruction
