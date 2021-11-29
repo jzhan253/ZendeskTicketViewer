@@ -49,7 +49,7 @@ class Tickets extends React.Component{
                 key:'status',
                 render: (record) => (
                     <Space size="middle">
-                        <Tag color={record.status === 'open' ? 'red' : 'green'}>{record.status}</Tag>
+                        <Tag color={record.status === 'open' ? 'red' : (record.status === 'pending' ? 'blue' : 'green')}>{record.status}</Tag>
                     </Space>
                 )
             },
