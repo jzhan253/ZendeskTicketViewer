@@ -142,6 +142,7 @@ public class ZendeskClient {
             HttpGet request = new HttpGet(url);
             if(EMAIL == null || EMAIL.length() == 0 || PASSWORD == null || PASSWORD.length() == 0) return "";
             String encoding = Base64.getEncoder().encodeToString((EMAIL + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));
+            System.out.println(encoding);
             request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
             return httpclient.execute(request, responseHandler);
         } catch (IOException e) {

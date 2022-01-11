@@ -29,7 +29,7 @@ function TicketDetail() {
                     setError(error.message)
                 }
             )
-    });
+    }, []);
     if(error){
         return (
             <div>

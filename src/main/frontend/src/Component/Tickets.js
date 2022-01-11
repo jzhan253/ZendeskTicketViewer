@@ -72,7 +72,7 @@ class Tickets extends React.Component{
                 key:'created_at',
                 render: (record) => (
                     <Space size="middle">
-                        <text>{format(new Date(record.created_at), "yyyy-MM-dd HH:mm")}</text>
+                        <p>{format(new Date(record.created_at), "yyyy-MM-dd HH:mm")}</p>
                     </Space>
                 )
             },
@@ -98,7 +98,7 @@ class Tickets extends React.Component{
                 key:'priority',
                 render: (record) => (
                     <Space size="middle">
-                        <text>{record.priority === null ? 'N/A' : record.priority}</text>
+                        <p>{record.priority === null ? 'N/A' : record.priority}</p>
                     </Space>
                 )
             },
@@ -106,7 +106,7 @@ class Tickets extends React.Component{
         if(error){
             return (
                 <div>
-                    <text>Error : {error}</text>
+                    <p>Error : {error}</p>
                     <Link to='/'><Button>Back to home page</Button></Link>
                 </div>
             );
